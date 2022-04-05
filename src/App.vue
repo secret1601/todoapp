@@ -8,7 +8,7 @@
     <div v-show="!todos.length" class="red">생성된 Todo 목록이 없습니다.</div>
     
     <!-- todo 목록창 -->
-    <TodoList v-bind:todos="todos"/>
+    <TodoList v-bind:todos="todos" v-on:toggle-todo="toggleTodo" v-on:delete-todo="deleteTodo"/>
 
   </div>
 </template>
@@ -29,7 +29,7 @@
     setup(){ 
       // 할일 목록(배열)을 저장
       const todos = ref([
-        {id:1, subject:'할일', completed: false}
+        {id:1, subject:'할일', complete: false}
       ]);
       
 
@@ -48,6 +48,14 @@
         todos.value.push(todo);
       };
 
+      const toggleTodo = (index) => {
+
+        // console.log('원본 : ' + todos.value[index].complete);
+        todos.value[index].complete = !todos.value[index].complete;
+        // console.log('변경 : ' + todos.value[index].complete);
+
+      }
+
       const deleteTodo = (index) => {
         // console.log('지우기' + index);
         // 배열내에서 순서 번호로 부터 1개 제거
@@ -58,7 +66,9 @@
         todos,
         addTodo,
         todoStyle,
-        deleteTodo
+        deleteTodo,
+        toggleTodo
+        
       }
     }
   }
