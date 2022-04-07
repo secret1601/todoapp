@@ -4,7 +4,7 @@
         <div class="card-body p-2 d-flex">
 
             <div class="form-check flex-grow-1">
-                <input type="checkbox" class="form-check-input" v-bind:value="todo.complete" v-bind:id="todo.id"
+                <input type="checkbox" class="form-check-input" v-bind:checked="todo.complete" v-bind:id="todo.id"
                     v-on:change="toggleTodo(index)">
                 <label class="form-check-label" v-bind:class="{ todocss : todo.complete}" v-bind:for="todo.id">
                     {{ todo.subject }}
