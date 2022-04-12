@@ -1,8 +1,5 @@
 <template>
 
-    <!-- 라우터 화면 보여주기 -->
-    <router-view />
-
     <div class="container">
 
         <!-- 타이틀 -->

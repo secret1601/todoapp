@@ -1,11 +1,6 @@
 {
   "todos": [
     {
-      "subject": "천재다",
-      "complete": false,
-      "id": 9
-    },
-    {
       "subject": "1",
       "complete": false,
       "id": 10
@@ -17,43 +12,13 @@
     },
     {
       "subject": "3",
-      "complete": false,
+      "complete": true,
       "id": 12
     },
     {
-      "subject": "4",
-      "complete": false,
+      "subject": "123",
+      "complete": true,
       "id": 13
-    },
-    {
-      "subject": "5",
-      "complete": false,
-      "id": 14
-    },
-    {
-      "subject": "6",
-      "complete": false,
-      "id": 15
-    },
-    {
-      "subject": "7",
-      "complete": false,
-      "id": 16
-    },
-    {
-      "subject": "8",
-      "complete": false,
-      "id": 17
-    },
-    {
-      "subject": "9",
-      "complete": false,
-      "id": 18
-    },
-    {
-      "subject": "10",
-      "complete": false,
-      "id": 19
     }
   ]
 }
