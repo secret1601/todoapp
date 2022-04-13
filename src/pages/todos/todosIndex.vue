@@ -1,9 +1,11 @@
 <template>
 
     <div class="container">
-
         <!-- 타이틀 -->
+        <div class="d-flex justify-content-between mt-3 mb-3">
         <AppTitle :apptitle="apptext" />
+        <button class="btn btn-primary btn-sm" @click="moveToCreate">할일 등록</button>
+        </div>
 
         <!-- 할일 검색 입력창 -->
         <input class="form-control" v-model="searchText" type="text" placeholder="Search Todo list"
@@ -15,7 +17,7 @@
         <hr />
 
         <!-- 할일 추가 입력창 -->
-        <TodoSimpleForm @add-todo="addTodo" />
+        <!-- <TodoSimpleForm @add-todo="addTodo" /> -->
 
         <!-- 목록없음 안내창 -->
         <div v-show="!todos.length" class="red">생성된 Todo 목록이 없습니다.</div>
@@ -28,6 +30,8 @@
         <!-- 페이지네이션 -->
         <AppPagination :currentPage="nowPage" :allPage="numberOfPages" @page-show="getTodo" />
 
+        <!-- 안내창 -->
+        <ToastBox v-if="showToast" :message="toastMessage" :type="toastAlertType" />
 
     </div>
 </template>
@@ -40,22 +44,38 @@
     } from 'vue';
     import axios from 'axios'
 
-    import TodoSimpleForm from '@/components/TodoSimpleForm.vue'
+    // import TodoSimpleForm from '@/components/TodoSimpleForm.vue'
     import TodoList from '@/components/TodoList.vue'
     import AppTitle from '@/components/AppTitle.vue'
     import ErrorBox from '@/components/ErrorBox.vue'
     import AppPagination from '@/components/AppPagination.vue'
 
+    import ToastBox from '@/components/ToastBox.vue';
+    import {
+        useToast
+    } from '@/composables/toast.js';
+
+    import { useRouter } from 'vue-router';
+
     export default {
 
         components: {
-            TodoSimpleForm,
+            // TodoSimpleForm,
             TodoList,
             AppTitle,
             ErrorBox,
-            AppPagination
+            AppPagination,
+
+            ToastBox
         },
         setup() {
+            // 할일 생성 페이지로 이동
+            const router = useRouter();
+            const moveToCreate = () => {
+                router.push({
+                    name: 'TodoCreate'
+                });
+            };
 
             // 타이틀
             const apptext = ref('오늘 할일');
@@ -78,33 +98,36 @@
             const numberOfPages = computed(() => {
                 // 총 게시물 / 페이지당 출력 수  ====> 올림
                 return Math.ceil(totalTodos.value / limit);
-
             });
+
+            // ToastBox 관련
+            const {
+                showToast,
+                toastMessage,
+                triggerToast,
+                toastAlertType
+            } = useToast();
 
             // 할일 검색 관련 
             const searchText = ref('');
             let timeout = null;
 
-            // 키보드의 Enter키를 입력하면 검색을 바로 실행
+            // 키보드의 Enter 키를 입력하면 검색을 바로 실행
             const searchTodo = () => {
                 // 타이머 실행을 지워준다.
                 clearTimeout(timeout);
-                // 검색을 즉시 실행
+                // 검색을 즉시 실행한다.
                 getTodo(1);
             }
 
             watch(searchText, () => {
-
                 // 연속으로 검색어를 서버에 전달하는 과정을 일부 제한한다.
-                // clearTimeout은 실행을 하려고 했던 명령을 취소한다.
+                // clearTimeout 은 실행을 하려고 했던 명령을 취소한다.
                 clearTimeout(timeout);
-
                 timeout = setTimeout(() => {
-                    getTodo(1)
+                    getTodo(1);
                 }, 2000);
-
             });
-
 
             // DB 에서 자료 불러오기
             const getTodo = async (page = nowPage.value) => {
@@ -116,7 +139,7 @@
                     // res 에서 받는다. (response)
                     const res = await axios.get(
                         `http://localhost:3000/todos?subject_like=${searchText.value}&_page=${page}&_limit=${limit}&_sort=id&_order=desc`
-                        );
+                    );
                     // console.log(res.headers)
                     // 총 todos 개수 파악
                     totalTodos.value = res.headers["x-total-count"];
@@ -133,6 +156,7 @@
                 } catch (err) {
                     console.log(err);
                     error.value = "자료를 불러오는데 실패했습니다.";
+                    triggerToast("자료를 불러오는데 실패했습니다.", 'danger');
                 }
             }
 
@@ -144,68 +168,62 @@
             // 처리해 주는 콜백함수 
             const addTodo = async (추가되는할일) => {
                 error.value = '';
-            
                 try {
                     // 데이터 베이스에 저장이 되어야 하는 데이터
                     await axios.post('http://localhost:3000/todos', {
                         subject: 추가되는할일.subject,
                         complete: 추가되는할일.complete
                     });
-
                     getTodo(1);
-
                 } catch (err) {
                     console.log(err);
                     error.value = "서버 확인해 주세요.";
+                    triggerToast("서버 확인해 주세요.", 'danger');
                 }
-
             };
 
             const toggleTodo = async (index, checked) => {
-
                 // complete 를 업데이트 하겠다.
                 // id 를 통해서 내용을 업데이트 하겠다.
                 error.value = '';
                 const id = todos.value[index].id;
                 try {
-
                     // 서버의 DB 를 업데이트 한다.
                     await axios.patch('http://localhost:3000/todos/' + id, {
                         complete: checked
                     });
                     // 웹브라우저의 todo 의 화면을 표현한다.
                     todos.value[index].complete = checked;
+                    
+                    triggerToast("상태를 변경하였습니다.", 'success');
 
                 } catch (err) {
                     console.log(err);
                     error.value = "업데이트에 실패하였습니다.";
+                    triggerToast("업데이트에 실패하였습니다.", 'danger');
                 }
-
-
-
-                // console.log('원본 : ' + todos.value[index].complete);
-                // todos.value[index].complete = !todos.value[index].complete;
-                // console.log('변경 : ' + todos.value[index].complete);
             }
 
             const deleteTodo = async (index) => {
-
                 const id = todos.value[index].id;
-                // console.log(id);
                 error.value = '';
-
                 try {
                     // 전체 삭제가 아니라 id와 같은 DB 를 삭제
                     await axios.delete('http://localhost:3000/todos/' + id);
+                    
+                    triggerToast("선택하신 목록을 삭제했습니다.", 'success');
+
                     getTodo(nowPage.value);
                 } catch (err) {
                     console.log(err);
                     error.value = "삭제에 실패했습니다.";
+                    triggerToast("삭제에 실패했습니다.", 'danger');
                 }
-
             }
 
             return {
+                moveToCreate,
+
                 todos,
                 addTodo,
                 toggleTodo,
@@ -220,7 +238,13 @@
                 numberOfPages,
                 getTodo,
 
-                apptext
+                apptext,
+
+                showToast,
+                toastMessage,
+                triggerToast,
+                toastAlertType
+
             }
         }
     }
