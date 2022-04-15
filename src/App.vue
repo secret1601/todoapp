@@ -9,17 +9,21 @@
     </div>
   </nav>
 
+
   <!-- 라우터 화면 보여주기 -->
   <div class="container">
     <router-view 
-              @update-todo-toast="updateTodo"  
-              @new-todo-toast="newTodo" 
+      @update-todo-toast="updateTodo"  
+      @new-todo-toast="newTodo" 
     />
+
+    
+    <!-- 안내창 -->
+    <ToastBox v-if="showToast" :message="toastMessage" :type="toastAlertType" />
+
+
   </div>
 
-  <!-- 안내창 -->
-  <ToastBox v-if="showToast" :message="toastMessage" :type="toastAlertType" />
-  
 </template>
 
 <script>
@@ -27,20 +31,20 @@
   import ToastBox from '@/components/ToastBox.vue';
   import { useToast } from '@/composables/toast.js';
 
+
   export default {
     components: {
       ToastBox
     },
     setup() {
       const updateTodo = () => {
-        console.log('업데이트!');
+        console.log('업데이트');
         triggerToast("목록이 업데이트 되었습니다.", 'success');
       };
       const newTodo = () => {
         console.log('새글등록');
         triggerToast("새로운 글이 추가되었습니다.", 'success');
       };
-
       // ToastBox 관련
       const {
         showToast,
@@ -63,4 +67,5 @@
 </script>
 
 <style>
+
 </style>

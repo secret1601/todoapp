@@ -1,20 +1,19 @@
 <template>
     <div v-if="loading">Loading...</div>
     <form v-else @submit.prevent="onSave">
-        <div class="row">
+        <div class="row"> 
+
             <!-- 제목 수정 및 입력 창 -->
             <div class="col-6">
-                <div class="form-group">
-                    <label>제목</label>
-                    <input type="text" class="form-control" v-model="todo.subject">
-                    <div v-if="subjectError" style="color: red">{{ subjectError }}</div>
-                </div>
-
+                <InputView
+                    :label="제목"
+                    :err="subjectError"
+                    v-model:subject="todo.subject"
+                />
             </div>
 
             <!-- 상태 수정 창 -->
-            <div class="col-6" v-if="editing">
-                
+            <div class="col-6" v-if="editing">                
                 <div class="form-group">                    
                     <label>완료여부</label>   
                     <div>
@@ -39,31 +38,37 @@
                 </div>
             </div>
 
-        </div>
+        </div>        
 
         <button class="btn btn-primary" type="submit" :disabled="todoUpdate">
-            {{editing ? '수정' : '생성'}}
-        </button>        
+            {{ editing ? '수정' : '생성' }}
+        </button>
+
         <button class="btn btn-outline-dark ml-2" @click="moveBack" type="button">취소</button>
 
     </form>
+    
+    <Transition  name="fade">
+        <!-- 안내창 -->
+        <ToastBox v-if="showToast" :message="toastMessage" :type="toastAlertType"/>
+    </Transition>
 
-    <!-- 안내창 -->
-    <ToastBox v-if="showToast" :message="toastMessage" :type="toastAlertType"/>
 </template>
 
 <script>
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
-import {computed, ref} from 'vue';
+import {computed, ref, onUpdated} from 'vue';
 import _ from 'lodash';
 import ToastBox from '@/components/ToastBox.vue';
 import { useToast } from '@/composables/toast.js';
+import InputView from '@/components/InputView.vue';
 
 export default {
 
     components: {
-        ToastBox
+        ToastBox,
+        InputView
     },
     props: {
         editing: {
@@ -72,22 +77,27 @@ export default {
         }
     },
     emits: ['update-todo', 'new-todo'],
-    setup(props, {emit}) {
+    setup(props, {emit}) {   
+
+        onUpdated(() => {
+            console.log(todo.value.subject);
+        })
 
         const route = useRoute();
         const router = useRouter();
-       // 현재 진행 및 수정 중인 todo 정보를 저장하고 있는 객체
+        // 현재 진행 및 수정 중인 todo 정보를 저장하고 있는 객체
         const todo =  ref({
             subject: '',
             complete: false,
             body: ''
         });
+
         // 원래 가지고 있었던 todo 저장를 저장하고 있는 객체
         const originalTodo = ref(null);
 
-        // 내용을 가지고 올때(편집)만 활용
+        // 내용을 가지고 올때만(편집) 활용
         const loading = ref(false);
-
+        
         // id는 읽어올때 사용, 저장할 때 사용
         const todoId = route.params.id;
         
@@ -97,8 +107,11 @@ export default {
             toastMessage,
             triggerToast,
             toastAlertType
+        } = useToast();
 
-        } = useToast();    
+        // const updateTodoSubject = (txt) => {
+        //     todo.value.subject = txt;
+        // }
 
         const getTodo = async () => {
             // 내용을 가지고 올때 로딩 보여주고
@@ -107,15 +120,13 @@ export default {
                 const res = await axios.get(`http://localhost:3000/todos/${todoId}`);
                 todo.value = { ...res.data}; // spread 연산으로 내용물만 복사
                 originalTodo.value = { ...res.data};
-                
                 // 결과가 오게 되면
                 loading.value = false;
 
             } catch(error) {
-                
                 // 결과가 오게 되면
                 loading.value = false;
-
+                
                 console.log(error);
                 triggerToast('서버에서 자료를 호출하는데 실패하였습니다.', 'danger');
             }
@@ -130,7 +141,7 @@ export default {
         // 편집이라면 아래 구문을 실행한다.
         if(props.editing) {
             getTodo();
-        }
+        }    
 
         const toggleTodoState = () => {
             todo.value.complete = !todo.value.complete
@@ -148,7 +159,6 @@ export default {
         const onSave = async () => {
 
             subjectError.value = '';
-
             // 만약에 제목이 없으면 등록 및 편집 불가
             if(!todo.value.subject) {
                 subjectError.value = '제목을 입력하세요';
@@ -157,7 +167,6 @@ export default {
             }
 
             try {
-
                 let res;
                 const data = {
                     subject: todo.value.subject,
@@ -174,34 +183,30 @@ export default {
                     emit('update-todo', {});
 
                     triggerToast('데이터 업데이트에 성공하였습니다.', 'success');
-
-                } else {
+                }else{
                     // 신규 등록인 경우
                     res = await axios.post(`http://localhost:3000/todos`, data);
                     emit('new-todo', {});
 
                     triggerToast('데이터 저장에 성공하였습니다.', 'success');
-                }
+                }                
 
-                // 제목, 내용을 비운다.
+                //  제목, 내용을 비운다.
                 todo.value.subject = '';
                 todo.value.body = '';
                 // 목록으로 돌아간다.
                 router.push({
-                    name: 'Todos'
+                        name: 'Todos'
                 });
-                
 
-            
             } catch(error) {
                 console.log(error);
                 if(props.editing) {
-                triggerToast("데이터 업데이트에 실패하였습니다.", 'danger');
-                } else {
-                triggerToast("데이터 저장에 실패하였습니다.", 'danger');
-                }
+                    triggerToast("데이터 업데이트에 실패하였습니다.", 'danger');
+                }else{
+                    triggerToast("데이터 저장에 실패하였습니다.", 'danger');
+                }                
             }
-                        
         };
 
         return {
@@ -225,4 +230,30 @@ export default {
 </script>
 
 <style>
+</style>
+
+<style scoped>
+    .bold-text {
+        font-weight: 900;
+    }
+
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: all 0.5s ease;
+    }
+
+
+    .fade-enter-from,
+    .fade-leave-to {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    .fade-enter-to,
+    .fade-leave-from {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+
+
 </style>

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeIndex from '../pages/HomeIndex.vue';
-import TodosIndex from '../pages/todos/todosIndex.vue';
+import TodosIndex from '../pages/todos/TodosIndex.vue';
 import AboutIndex from '../pages/AboutIndex.vue';
 import ProfileIndex from '../pages/ProfileIndex.vue';
 import Todo from '../pages/todos/_id.vue';
@@ -22,14 +22,14 @@ const router = createRouter({
             component: TodosIndex
         },
         {
-            path: '/about',
-            name: 'About',
-            component: AboutIndex
+            path:'/about',
+            name:'About',
+            component:AboutIndex
         },
         {
-            path: '/profile',
-            name: 'Profile',
-            component: ProfileIndex
+            path:'/profile',
+            name:'Profile',
+            component:ProfileIndex
         },
         {
             path: '/todos/:id',
@@ -38,7 +38,7 @@ const router = createRouter({
         },
         {
             path: '/todos/create',
-            name: 'TodoCreate', 
+            name: 'TodoCreate',
             component: TodoCreate
         }
     ]

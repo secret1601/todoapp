@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-    export default{
+    export default {
         props: {
             message: {
                 type: String,
@@ -18,11 +18,9 @@
     }
 </script>
 <style>
-
     .toast-box {
         position: fixed;
         top: 30px;
         right: 10px;
     }
-
 </style>

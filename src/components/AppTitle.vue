@@ -1,17 +1,17 @@
 <template>
-    <h1>{{apptitle}}</h1>
+    <h1>{{ apptitle }}</h1>    
 </template>
 
 <script>
-export default ({
+export default {
     // props: ['apptitle']
     props: {
         apptitle: {
             type: String,
-            requierd: true
+            required: true
         }
     }
-})
+}
 </script>
 
 <style>

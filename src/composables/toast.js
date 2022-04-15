@@ -1,7 +1,4 @@
-import {
-    ref,
-    onUnmounted
-} from 'vue'
+import {ref, onUnmounted} from 'vue'
 
 export const useToast = () => {
     // toastBox 관련
@@ -15,22 +12,22 @@ export const useToast = () => {
         toastAlertType.value = type;
 
         toastTimeout.value = setTimeout(() => {
-            toastMessage.value = '';
+            toastMessage.value='';
             toastAlertType.value = '';
             showToast.value = false;
         }, 3000)
     }
-    // 컴포넌트 해제
-    const toastTimeout = ref(null);
-    onUnmounted(() => {
-        // 타이머 실행을 막아준다. 메모리 절약  
-        clearTimeout(toastTimeout);
-    });
+     // 컴포넌트 해제
+     const toastTimeout = ref(null);
+     onUnmounted( () => { 
+         // 타이머 실행을 막아준다. 메모리 절약  
+         clearTimeout(toastTimeout);
+     });
 
-    return {
+     return  {
         showToast,
         toastMessage,
         triggerToast,
         toastAlertType
-    }
+     }
 }
