@@ -31,6 +31,7 @@
 
 <script>
     import ModalWin from '@/components/ModalWin.vue'
+    import {getCurrentInstance} from 'vue'
 
     export default {
         components: {
@@ -38,7 +39,8 @@
         },
         emits: ['close', 'delete'],
         
-        setup(props, {emit}) {
+        setup() {
+        const {emit} = getCurrentInstance();
             const onClose = () => {
                 emit('close');
             };

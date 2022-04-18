@@ -59,6 +59,8 @@
     import DeleteModal from '@/components/DeleteModal.vue'
     import {ref} from 'vue'
     import ListView from '@/components/ListView.vue'
+    
+    import {getCurrentInstance} from 'vue'
 
     export default {
         components: {
@@ -76,7 +78,9 @@
 
         emits: ['toggle-todo', 'delete-todo'],
 
-        setup(props, {emit}){
+        setup(){
+
+            const {emit} = getCurrentInstance();
 
             // 실제 삭제될 id를 보관해 둠
             const todoDeleteId = ref(null);

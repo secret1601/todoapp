@@ -20,6 +20,8 @@
 </template>
 
 <script>
+    import { getCurrentInstance } from 'vue';
+
     export default {
 
         props: {
@@ -38,8 +40,8 @@
         },
 
         emits: ['update-subject'],
-
-        setup(props, {emit}) {
+        setup() {
+            const { emit } = getCurrentInstance();
             const onInput = (event) => {
                 emit('update:subject', event.target.value);
             }
