@@ -1,0 +1,65 @@
+[33mcommit 7d20b8b068a329826917bd67ec6c511b72f75797[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: secret <asdxxxcx41@gmail.com>
+Date:   Mon Apr 18 10:56:27 2022 +0900
+
+    axios baseURL 적용
+
+[33mcommit a4cce227fe069dce4a5d2525c0f1abcc6eeeecc4[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: secret <asdxxxcx41@gmail.com>
+Date:   Fri Apr 15 13:20:48 2022 +0900
+
+    업데이트
+
+[33mcommit 26bd2341bb2005b08fb4735fc22f17f7a3cd47fb[m
+Author: secret <asdxxxcx41@gmail.com>
+Date:   Wed Apr 13 14:50:21 2022 +0900
+
+    Todo 수정
+
+[33mcommit 6d03825a82b4e8a5378b173300d187da92204bcc[m
+Author: secret <asdxxxcx41@gmail.com>
+Date:   Tue Apr 12 13:03:52 2022 +0900
+
+    업데이트
+
+[33mcommit 0285b3a1556a3c34caac8f4783564bf2615f59cb[m
+Author: secret <asdxxxcx41@gmail.com>
+Date:   Mon Apr 11 13:21:34 2022 +0900
+
+    라우터
+
+[33mcommit 3ed8ac658b4fab752fc9b57367a60cad6cedf141[m
+Author: secret <asdxxxcx41@gmail.com>
+Date:   Fri Apr 8 13:10:08 2022 +0900
+
+    검색 기능 추가
+
+[33mcommit 65bfe154fbab51d8078bb3577c1e8f1d352efb75[m
+Author: secret <asdxxxcx41@gmail.com>
+Date:   Thu Apr 7 15:08:48 2022 +0900
+
+    DB업데이트
+
+[33mcommit b6f36e423a5a14f01e7a1bed044e20be6f8b3726[m
+Author: secret <asdxxxcx41@gmail.com>
+Date:   Tue Apr 5 18:01:06 2022 +0900
+
+    컴포넌트완료
+
+[33mcommit bd9284113496677090bdd4e00a53966bc34ad6b0[m
+Author: secret <asdxxxcx41@gmail.com>
+Date:   Tue Apr 5 16:46:05 2022 +0900
+
+    emit 및 props
+
+[33mcommit 91e995746c4b93516ed0bc64a97de9802a21d787[m
+Author: secret <asdxxxcx41@gmail.com>
+Date:   Tue Apr 5 14:39:16 2022 +0900
+
+    프로젝트 생성
+
+[33mcommit 8f0bdf7a60665ae083cd9680f059fd901a84f63f[m
+Author: secret <asdxxxcx41@gmail.com>
+Date:   Mon Apr 4 10:19:31 2022 +0900
+
+    init
