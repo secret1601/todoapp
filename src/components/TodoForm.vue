@@ -48,11 +48,6 @@
 
     </form>
     
-    <Transition  name="fade">
-        <!-- 안내창 -->
-        <ToastBox v-if="showToast" :message="toastMessage" :type="toastAlertType"/>
-    </Transition>
-
 </template>
 
 <script>
@@ -62,14 +57,12 @@ import axios from '@/axios.js'
 
 import {computed, ref, onUpdated} from 'vue';
 import _ from 'lodash';
-import ToastBox from '@/components/ToastBox.vue';
 import { useToast } from '@/composables/toast.js';
 import InputView from '@/components/InputView.vue';
 
 export default {
 
     components: {
-        ToastBox,
         InputView
     },
     props: {
@@ -110,10 +103,6 @@ export default {
             triggerToast,
             toastAlertType
         } = useToast();
-
-        // const updateTodoSubject = (txt) => {
-        //     todo.value.subject = txt;
-        // }
 
         const getTodo = async () => {
             // 내용을 가지고 올때 로딩 보여주고
@@ -236,28 +225,6 @@ export default {
 <style>
 </style>
 
-<style scoped>
-    .bold-text {
-        font-weight: 900;
-    }
-
-    .fade-enter-active,
-    .fade-leave-active {
-        transition: all 0.5s ease;
-    }
-
-
-    .fade-enter-from,
-    .fade-leave-to {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-
-    .fade-enter-to,
-    .fade-leave-from {
-        opacity: 1;
-        transform: translateY(0px);
-    }
-
-
+<style>
+    
 </style>
